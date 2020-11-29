@@ -29,146 +29,131 @@ class PeliculaRoutes {
             });
             database_1.db.desconectarBD();
         });
+        // private getNuevaPelicula = async (req: Request, res: Response) => {
+        //     const {nombre, recauentrada, numdias, recauotros, gastos,
+        //         sueldoempleado, numeroempleados, numpers} = req.params
+        //     console.log(req.params)
+        //     await db.conectarBD()
+        //     const schema = {
+        //         _nombre: nombre,
+        //         _recauentrada: recauentrada,
+        //         _numdias: numdias,
+        //         _recauotros: recauotros,
+        //         _gastos: gastos,
+        //         _sueldoempleado: sueldoempleado,
+        //         _numeroempleados: numeroempleados,
+        //         _numpers: numpers
+        //     }
+        //     const nSchema = new Peliculas(schema)
+        //     await nSchema.save()
+        //     .then((doc) => {
+        //         console.log('Guardado correctamente: '+ doc)
+        //         res.json(doc)
+        //     })
+        //     .catch((err: any) => {
+        //         console.log(err)
+        //         res.json(err)
+        //     })    
+        //     await db.desconectarBD()
+        // } 
         this.nuevaPelicula = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { nombre, recauentrada, numdias, recauotros, gastos, sueldoempleado, numempleados, numpers } = req.params;
-            console.log(req.params);
-            yield database_1.db.conectarBD();
-            const dSchema = {
+            const { nombre, recauentrada, numdias, recauotros, gastos, sueldoempleado, numeroempleados, numpers } = req.body;
+            const schema = {
                 _nombre: nombre,
-                _recauentrada: parseInt(recauentrada),
-                _numdias: parseInt(numdias),
-                _recauotros: parseInt(recauotros),
-                _gastos: parseInt(gastos),
-                _sueldoempleado: parseInt(sueldoempleado),
-                _numempleados: parseInt(numempleados),
-                _numpers: parseInt(numpers)
+                _recauentrada: recauentrada,
+                _numdias: numdias,
+                _recauotros: recauotros,
+                _gastos: gastos,
+                _sueldoempleado: sueldoempleado,
+                _numeroempleados: numeroempleados,
+                _numpers: numpers
             };
-            const oSchema = new Pelicula_1.Peliculas(dSchema);
-            yield oSchema.save()
+            const nSchema = new Pelicula_1.Peliculas(schema);
+            yield database_1.db.conectarBD();
+            yield nSchema.save()
                 .then((doc) => {
-                console.log('Salvado Correctamente: ' + doc);
+                console.log(doc);
                 res.json(doc);
             })
                 .catch((err) => {
-                console.log('Error: ' + err);
-                res.send('Error: ' + err);
+                console.log(err);
+                res.json(err);
             });
-            // concatenando con cadena muestra sólo el mensaje
             yield database_1.db.desconectarBD();
         });
         this.getDiaGanado = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                console.log(mensaje);
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield Pelicula_1.Peliculas.findOne({ _nombre: nombre });
                 if (query == null) {
-                    console.log(query);
                     res.json({});
                 }
                 else {
-                    const pelicula = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numempleados);
-                    pelicula.diaganado = query._numpers;
-                    console.log(pelicula);
-                    res.json({ "nombre": pelicula.nombre, "Ganado en ese dia": pelicula.diaganado() });
+                    const p = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numeroempleados, query._numpers);
+                    res.json({ "nombre": p._nombre, "Ganado en ese dia": p.diaganado() });
                 }
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-                console.log(mensaje);
-            });
+            }));
             database_1.db.desconectarBD();
         });
         this.getTotalGanado = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                console.log(mensaje);
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield Pelicula_1.Peliculas.findOne({ _nombre: nombre });
                 if (query == null) {
-                    console.log(query);
                     res.json({});
                 }
                 else {
-                    const pelicula = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numempleados);
-                    pelicula.totalganado = query._numpers;
-                    console.log(pelicula);
-                    res.json({ "nombre": pelicula.nombre, "Ganado en total": pelicula.totalganado() });
+                    const p = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numeroempleados, query._numpers);
+                    res.json({ "nombre": p._nombre, "Ganado en total": p.totalganado() });
                 }
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-                console.log(mensaje);
-            });
+            }));
             database_1.db.desconectarBD();
         });
         this.getPagoEmpleados = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                console.log(mensaje);
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield Pelicula_1.Peliculas.findOne({ _nombre: nombre });
                 if (query == null) {
-                    console.log(query);
                     res.json({});
                 }
                 else {
-                    const pelicula = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numempleados);
-                    pelicula.costempleados = query._numpers;
-                    console.log(pelicula);
-                    res.json({ "nombre": pelicula.nombre, "Pagado a empleados": pelicula.costempleados() });
+                    const p = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numeroempleados, query._numpers);
+                    res.json({ "nombre": p._nombre, "Pagado a empleados": p.costempleados() });
                 }
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-                console.log(mensaje);
-            });
+            }));
             database_1.db.desconectarBD();
         });
         this.getGastoTotal = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                console.log(mensaje);
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield Pelicula_1.Peliculas.findOne({ _nombre: nombre });
                 if (query == null) {
-                    console.log(query);
                     res.json({});
                 }
                 else {
-                    const pelicula = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numempleados);
-                    pelicula.gastostotal = query._numpers;
-                    console.log(pelicula);
-                    res.json({ "nombre": pelicula.nombre, "Total gastado": pelicula.gastostotal() });
+                    const p = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numeroempleados, query._numpers);
+                    res.json({ "nombre": p._nombre, "Gasto total": p.gastostotal() });
                 }
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-                console.log(mensaje);
-            });
+            }));
             database_1.db.desconectarBD();
         });
         this.getBeneficios = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
             yield database_1.db.conectarBD()
-                .then((mensaje) => __awaiter(this, void 0, void 0, function* () {
-                console.log(mensaje);
+                .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield Pelicula_1.Peliculas.findOne({ _nombre: nombre });
                 if (query == null) {
-                    console.log(query);
                     res.json({});
                 }
                 else {
-                    const pelicula = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numempleados);
-                    pelicula.beneficios = query._numpers;
-                    console.log(pelicula);
-                    res.json({ "nombre": pelicula.nombre, "Beneficios de la peli": pelicula.beneficios() });
+                    const p = new Pelicula_1.Pelicula(query._nombre, query._recauentrada, query._numdias, query._recauotros, query._gastos, query._sueldoempleado, query._numeroempleados, query._numpers);
+                    res.json({ "nombre": p._nombre, "Beneficios obtenidos": p.beneficios() });
                 }
-            }))
-                .catch((mensaje) => {
-                res.send(mensaje);
-                console.log(mensaje);
-            });
+            }));
             database_1.db.desconectarBD();
         });
         this.getBorrar = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -192,7 +177,7 @@ class PeliculaRoutes {
         });
         this.modifica = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre } = req.params;
-            const { recauentrada, numdias, recauotros, gastos, sueldoempleado, numempleados, numpers } = req.body;
+            const { recauentrada, numdias, recauotros, gastos, sueldoempleado, numeroempleados, numpers } = req.body;
             yield database_1.db.conectarBD();
             yield Pelicula_1.Peliculas.findOneAndUpdate({ _nombre: nombre }, {
                 _nombre: nombre,
@@ -201,27 +186,21 @@ class PeliculaRoutes {
                 _recauotros: recauotros,
                 _gastos: gastos,
                 _sueldoempleado: sueldoempleado,
-                _numempleados: numempleados,
+                _numeroempleados: numeroempleados,
                 _numpers: numpers
             }, {
                 new: true,
-                runValidators: true // para que se ejecuten las validaciones del Schema
+                runValidators: true
             })
                 .then((docu) => {
-                if (docu == null) {
-                    console.log('La pelicula que desea modificar no existe');
-                    res.json({ "Error": "No existe: " + nombre });
-                }
-                else {
-                    console.log('Modificado Correctamente: ' + docu);
-                    res.json(docu);
-                }
+                console.log('Modificado Correctamente: ' + docu);
+                res.json(docu);
             })
                 .catch((err) => {
-                console.log('Error: ' + err);
-                res.json({ error: 'Error: ' + err });
-            }); // concatenando con cadena muestra mensaje
-            database_1.db.desconectarBD();
+                console.log(err);
+                res.json({ err });
+            });
+            yield database_1.db.desconectarBD();
         });
         this._router = express_1.Router();
     }
@@ -230,6 +209,7 @@ class PeliculaRoutes {
     }
     misRutas() {
         this._router.get('/', this.getPeliculas);
+        // this._router.get('/nuevapelicula/:nombre&:recauentrada&:numdias&:recauotros&:gastos&:sueldoempleado&:numeroempleado&:numpers', this.getNuevaPelicula)
         this._router.post('/nuevapeli', this.nuevaPelicula);
         this._router.get('/diaganado/:nombre', this.getDiaGanado);
         this._router.get('/totalganado/:nombre', this.getTotalGanado);

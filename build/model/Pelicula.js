@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Peliculas = exports.Pelicula = void 0;
 const mongoose_1 = require("mongoose");
 class Pelicula {
-    constructor(_nombre, _recauentrada, _numdias, _recauotros, _gastos, _sueldoempleado, _numeroempleados) {
+    constructor(_nombre, _recauentrada, _numdias, _recauotros, _gastos, _sueldoempleado, _numeroempleados, _numpers) {
         this._nombre = _nombre;
         this._recauentrada = _recauentrada;
         this._numdias = _numdias;
@@ -11,6 +11,7 @@ class Pelicula {
         this._gastos = _gastos;
         this._sueldoempleado = _sueldoempleado;
         this._numeroempleados = _numeroempleados;
+        this._numpers = _numpers;
     }
     get nombre() {
         return this._nombre;

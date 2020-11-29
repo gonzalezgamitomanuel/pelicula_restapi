@@ -31,57 +31,76 @@ class PeliculaRoutes {
 
     }
 
-    private nuevaPelicula = async (req: Request, res: Response) => {
-        const { nombre, recauentrada, numdias, recauotros, gastos, sueldoempleado,
-            numempleados, numpers } = req.params
-        console.log(req.params)
 
-        await db.conectarBD()
-        const dSchema = {
+    // private getNuevaPelicula = async (req: Request, res: Response) => {
+    //     const {nombre, recauentrada, numdias, recauotros, gastos,
+    //         sueldoempleado, numeroempleados, numpers} = req.params
+    //     console.log(req.params)
+    //     await db.conectarBD()
+    //     const schema = {
+    //         _nombre: nombre,
+    //         _recauentrada: recauentrada,
+    //         _numdias: numdias,
+    //         _recauotros: recauotros,
+    //         _gastos: gastos,
+    //         _sueldoempleado: sueldoempleado,
+    //         _numeroempleados: numeroempleados,
+    //         _numpers: numpers
+    //     }
+    //     const nSchema = new Peliculas(schema)
+    //     await nSchema.save()
+    //     .then((doc) => {
+    //         console.log('Guardado correctamente: '+ doc)
+    //         res.json(doc)
+    //     })
+    //     .catch((err: any) => {
+    //         console.log(err)
+    //         res.json(err)
+    //     })    
+    //     await db.desconectarBD()
+    // } 
+
+
+    private nuevaPelicula = async (req: Request, res: Response) => {
+        const {nombre, recauentrada, numdias, recauotros, gastos,
+            sueldoempleado, numeroempleados, numpers} = req.body
+        const schema = {
             _nombre: nombre,
-            _recauentrada: parseInt(recauentrada),
-            _numdias: parseInt(numdias),
-            _recauotros: parseInt(recauotros),
-            _gastos: parseInt(gastos),
-            _sueldoempleado: parseInt(sueldoempleado),
-            _numempleados: parseInt(numempleados),
-            _numpers: parseInt(numpers)
+            _recauentrada: recauentrada,
+            _numdias: numdias,
+            _recauotros: recauotros,
+            _gastos: gastos,
+            _sueldoempleado: sueldoempleado,
+            _numeroempleados: numeroempleados,
+            _numpers: numpers
         }
-        const oSchema = new Peliculas(dSchema)
-        await oSchema.save()
-        .then( (doc) => {
-            console.log('Salvado Correctamente: '+ doc)
+        const nSchema = new Peliculas(schema)
+        await db.conectarBD()
+        await nSchema.save()
+        .then((doc) => {
+            console.log(doc)
             res.json(doc)
         })
-        .catch( (err: any) => {
-            console.log('Error: '+ err)
-            res.send('Error: '+ err)
-        }) 
-        // concatenando con cadena muestra sólo el mensaje
+        .catch((err: any) => {
+            console.log(err)
+            res.json(err)
+        })    
         await db.desconectarBD()
     } 
 
     private getDiaGanado = async (req: Request, res: Response) => {
         const { nombre } = req.params
         await db.conectarBD()
-        .then( async (mensaje) => {
-            console.log(mensaje)
+        .then( async () => {
             const query: any = await Peliculas.findOne({_nombre: nombre})
             if (query == null){
-                console.log(query)
                 res.json({})
             }else{
-                const pelicula = new Pelicula(query._nombre, query._recauentrada, 
+                const p: any = new Pelicula(query._nombre, query._recauentrada, 
                     query._numdias, query._recauotros, query._gastos,
-                    query._sueldoempleado, query._numempleados)
-                pelicula.diaganado = query._numpers  
-                console.log(pelicula)
-                res.json({"nombre": pelicula.nombre, "Ganado en ese dia": pelicula.diaganado()})
+                    query._sueldoempleado, query._numeroempleados, query._numpers)
+                res.json({"nombre": p._nombre, "Ganado en ese dia": p.diaganado()})
             }
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-            console.log(mensaje)
         })
         db.desconectarBD()
     }
@@ -89,24 +108,16 @@ class PeliculaRoutes {
     private getTotalGanado = async (req: Request, res: Response) => {
         const { nombre } = req.params
         await db.conectarBD()
-        .then( async (mensaje) => {
-            console.log(mensaje)
+        .then( async () => {
             const query: any = await Peliculas.findOne({_nombre: nombre})
             if (query == null){
-                console.log(query)
                 res.json({})
             }else{
-                const pelicula = new Pelicula(query._nombre, query._recauentrada, 
+                const p: any = new Pelicula(query._nombre, query._recauentrada, 
                     query._numdias, query._recauotros, query._gastos,
-                    query._sueldoempleado, query._numempleados)
-                pelicula.totalganado = query._numpers 
-                console.log(pelicula)
-                res.json({"nombre": pelicula.nombre, "Ganado en total": pelicula.totalganado()})
+                    query._sueldoempleado, query._numeroempleados, query._numpers)
+                res.json({"nombre": p._nombre, "Ganado en total": p.totalganado()})
             }
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-            console.log(mensaje)
         })
         db.desconectarBD()
     }
@@ -114,24 +125,16 @@ class PeliculaRoutes {
     private getPagoEmpleados = async (req: Request, res: Response) => {
         const { nombre } = req.params
         await db.conectarBD()
-        .then( async (mensaje) => {
-            console.log(mensaje)
+        .then( async () => {
             const query: any = await Peliculas.findOne({_nombre: nombre})
             if (query == null){
-                console.log(query)
                 res.json({})
             }else{
-                const pelicula = new Pelicula(query._nombre, query._recauentrada, 
+                const p: any = new Pelicula(query._nombre, query._recauentrada, 
                     query._numdias, query._recauotros, query._gastos,
-                    query._sueldoempleado, query._numempleados)
-                pelicula.costempleados = query._numpers
-                console.log(pelicula)
-                res.json({"nombre": pelicula.nombre, "Pagado a empleados": pelicula.costempleados()})
+                    query._sueldoempleado, query._numeroempleados, query._numpers)
+                res.json({"nombre": p._nombre, "Pagado a empleados": p.costempleados()})
             }
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-            console.log(mensaje)
         })
         db.desconectarBD()
     }
@@ -139,24 +142,16 @@ class PeliculaRoutes {
     private getGastoTotal = async (req: Request, res: Response) => {
         const { nombre } = req.params
         await db.conectarBD()
-        .then( async (mensaje) => {
-            console.log(mensaje)
+        .then( async () => {
             const query: any = await Peliculas.findOne({_nombre: nombre})
             if (query == null){
-                console.log(query)
                 res.json({})
             }else{
-                const pelicula = new Pelicula(query._nombre, query._recauentrada, 
+                const p: any = new Pelicula(query._nombre, query._recauentrada, 
                     query._numdias, query._recauotros, query._gastos,
-                    query._sueldoempleado, query._numempleados)
-                pelicula.gastostotal = query._numpers
-                console.log(pelicula)
-                res.json({"nombre": pelicula.nombre, "Total gastado": pelicula.gastostotal()})
+                    query._sueldoempleado, query._numeroempleados, query._numpers)
+                res.json({"nombre": p._nombre, "Gasto total": p.gastostotal()})
             }
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-            console.log(mensaje)
         })
         db.desconectarBD()
     }
@@ -164,24 +159,16 @@ class PeliculaRoutes {
     private getBeneficios = async (req: Request, res: Response) => {
         const { nombre } = req.params
         await db.conectarBD()
-        .then( async (mensaje) => {
-            console.log(mensaje)
+        .then( async () => {
             const query: any = await Peliculas.findOne({_nombre: nombre})
             if (query == null){
-                console.log(query)
                 res.json({})
             }else{
-                const pelicula = new Pelicula(query._nombre, query._recauentrada, 
+                const p: any = new Pelicula(query._nombre, query._recauentrada, 
                     query._numdias, query._recauotros, query._gastos,
-                    query._sueldoempleado, query._numempleados)
-                pelicula.beneficios = query._numpers
-                console.log(pelicula)
-                res.json({"nombre": pelicula.nombre, "Beneficios de la peli": pelicula.beneficios()})
+                    query._sueldoempleado, query._numeroempleados, query._numpers)
+                res.json({"nombre": p._nombre, "Beneficios obtenidos": p.beneficios()})
             }
-        })
-        .catch((mensaje) => {
-            res.send(mensaje)
-            console.log(mensaje)
         })
         db.desconectarBD()
     }
@@ -209,7 +196,7 @@ class PeliculaRoutes {
     private modifica = async (req: Request, res: Response) => {
         const { nombre } = req.params
         const { recauentrada, numdias, recauotros, gastos,
-            sueldoempleado, numempleados, numpers  } = req.body
+            sueldoempleado, numeroempleados, numpers  } = req.body
         await db.conectarBD()
         await Peliculas.findOneAndUpdate(
                 { _nombre: nombre }, 
@@ -220,35 +207,29 @@ class PeliculaRoutes {
                     _recauotros: recauotros,
                     _gastos: gastos,
                     _sueldoempleado: sueldoempleado,
-                    _numempleados: numempleados,
+                    _numeroempleados: numeroempleados,
                     _numpers: numpers
                 },
                 {
                     new: true,
-                    runValidators: true // para que se ejecuten las validaciones del Schema
+                    runValidators: true 
                 }  
             )
             .then( (docu) => {
-                    if (docu==null){
-                        console.log('La pelicula que desea modificar no existe')
-                        res.json({"Error":"No existe: "+nombre})
-                    } else {
-                        console.log('Modificado Correctamente: '+ docu) 
-                        res.json(docu)
-                    }
-                    
-                }
-            )
+                console.log('Modificado Correctamente: '+ docu) 
+                 res.json(docu)
+            })
             .catch( (err) => {
-                console.log('Error: '+err)
-                res.json({error: 'Error: '+err })
+                console.log(err)
+                res.json({err})
             }
-            ) // concatenando con cadena muestra mensaje
-        db.desconectarBD()
+            ) 
+        await db.desconectarBD()
     }
 
     misRutas(){
         this._router.get('/', this.getPeliculas)
+        // this._router.get('/nuevapelicula/:nombre&:recauentrada&:numdias&:recauotros&:gastos&:sueldoempleado&:numeroempleado&:numpers', this.getNuevaPelicula)
         this._router.post('/nuevapeli', this.nuevaPelicula)
         this._router.get('/diaganado/:nombre', this.getDiaGanado)
         this._router.get('/totalganado/:nombre', this.getTotalGanado)
